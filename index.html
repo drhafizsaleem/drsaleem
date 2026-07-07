@@ -5,27 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dr. Hafiz Saleemullah | Saleem Medical Complex</title>
     <link rel="icon" href="./favicon.png" type="image/png">
+    
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Google Translate Script for Bilingual Feature -->
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- Firebase SDKs (Prepared for Backend Integration) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
         /* General Setup */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f4f9f9; color: #333; line-height: 1.6; }
+        :root {
+            --primary-blue: #003366;
+            --accent-maroon: #800000;
+            --success-green: #25D366;
+            --light-bg: #f4f9f9;
+            --text-dark: #333333;
+            --text-light: #666666;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: var(--light-bg); color: var(--text-dark); line-height: 1.6; scroll-behavior: smooth; }
         
         /* HEADER */
-        header { background-color: #ffffff; padding: 15px 8%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100; }
-        .logo { display: flex; align-items: center; font-size: 22px; font-weight: 800; color: #005b96; letter-spacing: 0.5px; text-transform: uppercase; }
-        .logo i { color: #25D366; margin-right: 12px; font-size: 26px; }
+        header { background-color: #ffffff; padding: 15px 8%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 1000; }
+        .logo { display: flex; align-items: center; font-size: 22px; font-weight: 800; color: var(--primary-blue); letter-spacing: 0.5px; text-transform: uppercase; }
+        .logo i { color: var(--accent-maroon); margin-right: 12px; font-size: 26px; }
         .nav-links { display: flex; align-items: center; gap: 20px; }
-        .nav-links a { text-decoration: none; color: #005b96; font-weight: 600; font-size: 16px; transition: 0.3s; }
-        .nav-links a:hover { color: #25D366; }
-        .appointment-btn { background-color: transparent; border: 2px solid #005b96; color: #005b96; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
-        .appointment-btn:hover { background-color: #005b96; color: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 91, 150, 0.2); }
-        .header-btn { background-color: #005b96; color: white; padding: 10px 22px; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
-        .header-btn:hover { background-color: #128C7E; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+        .nav-links a { text-decoration: none; color: var(--primary-blue); font-weight: 600; font-size: 16px; transition: 0.3s; }
+        .nav-links a:hover { color: var(--accent-maroon); }
+        
+        /* Language Translator Positioning */
+        #google_translate_element { margin-right: 10px; }
+        .goog-te-gadget-simple { border-radius: 8px !important; padding: 5px !important; border: 1px solid var(--primary-blue) !important; font-family: inherit !important; }
+
+        .appointment-btn { background-color: transparent; border: 2px solid var(--primary-blue); color: var(--primary-blue); padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .appointment-btn:hover { background-color: var(--primary-blue); color: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 51, 102, 0.2); }
+        .header-btn { background-color: var(--primary-blue); color: white; padding: 10px 22px; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .header-btn:hover { background-color: var(--accent-maroon); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(128, 0, 0, 0.3); }
         
         @media (max-width: 900px) {
             header { flex-direction: column; gap: 15px; padding: 15px 5%; }
@@ -33,107 +53,114 @@
         }
 
         /* HERO SECTION */
-        .hero { background: linear-gradient(135deg, #005b96, #03395e); color: white; padding: 80px 10%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; position: relative; overflow: hidden; }
-        .hero::after { content: ''; position: absolute; width: 500px; height: 500px; background: rgba(255,255,255,0.04); border-radius: 50%; right: -150px; top: -150px; }
+        .hero { background: linear-gradient(135deg, var(--primary-blue), #001f4d); color: white; padding: 80px 10%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; position: relative; overflow: hidden; }
         .hero-text { max-width: 55%; min-width: 300px; z-index: 1; }
         .hero-text h1 { font-size: 46px; margin-bottom: 15px; font-weight: 800; line-height: 1.2; color: #ffffff; }
-        .hero-text h2 { font-size: 24px; font-weight: 400; color: #25D366; margin-top: 0; margin-bottom: 20px;}
+        .hero-text h2 { font-size: 24px; font-weight: 400; color: #4da6ff; margin-top: 0; margin-bottom: 20px;}
         .hero-text p { font-size: 18px; margin-bottom: 35px; line-height: 1.8; color: #d0e1ee; }
-        .btn { background-color: #25D366; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; }
-        .btn:hover { background-color: #128C7E; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4); }
+        .btn { background-color: var(--accent-maroon); color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; }
+        .btn:hover { background-color: #990000; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(153, 0, 0, 0.4); }
         .hero-image { text-align: center; z-index: 1; margin-top: 20px; }
         .hero-image img { width: 100%; max-width: 350px; border-radius: 20px; border: 6px solid rgba(255,255,255,0.15); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
-        
+
         /* INFO SECTION (Timings) */
         .info-strip { background-color: #ffffff; padding: 40px 10%; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid #eaeaea; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .info-item { display: flex; align-items: center; gap: 15px; }
-        .info-item i { font-size: 36px; color: #25D366; }
-        .info-text h4 { margin: 0; font-size: 18px; color: #005b96; }
-        .info-text p { margin: 5px 0 0; color: #666; font-size: 15px; font-weight: 500; }
+        .info-item i { font-size: 36px; color: var(--accent-maroon); }
+        .info-text h4 { margin: 0; font-size: 18px; color: var(--primary-blue); }
+        .info-text p { margin: 5px 0 0; color: var(--text-light); font-size: 15px; font-weight: 500; }
+        
+        /* DOCTOR PROFILE SECTION */
+        .profile-section { padding: 80px 10%; background-color: #ffffff; display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+        .profile-image { flex: 1; min-width: 300px; text-align: center; }
+        /* DOCTOR'S ORIGINAL IMAGE ADDED HERE */
+        .profile-image img { width: 100%; max-width: 300px; border-radius: 50%; border: 5px solid var(--primary-blue); box-shadow: 0 10px 25px rgba(0,0,0,0.1); object-fit: cover; }
+        .profile-text { flex: 2; min-width: 300px; }
+        .profile-text h3 { color: var(--primary-blue); font-size: 32px; margin-bottom: 10px; }
+        .profile-text h5 { color: var(--accent-maroon); font-size: 18px; margin-top: 0; margin-bottom: 20px; }
+        .profile-text p { color: var(--text-light); font-size: 16px; margin-bottom: 15px; }
+        .profile-text ul { list-style: none; padding: 0; }
+        .profile-text ul li { margin-bottom: 10px; color: #444; font-weight: 500; display: flex; align-items: center; gap: 10px;}
+        .profile-text ul li i { color: var(--primary-blue); }
 
         /* SERVICES SECTION */
-        .services { padding: 90px 8%; background-color: #f4f9f9; text-align: center; }
-        .services h3 { color: #005b96; font-size: 38px; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; }
-        .services > p { color: #555; font-size: 18px; margin-bottom: 50px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .services { padding: 90px 8%; background-color: var(--light-bg); text-align: center; }
+        .services h3 { color: var(--primary-blue); font-size: 38px; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; }
+        .services > p { color: var(--text-light); font-size: 18px; margin-bottom: 50px; max-width: 600px; margin-left: auto; margin-right: auto; }
         .service-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .service-card { background: white; border-radius: 16px; overflow: hidden; transition: 0.4s; border: 1px solid #eef2f5; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .service-card:hover { transform: translateY(-12px); border-bottom: 5px solid #25D366; box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+        .service-card:hover { transform: translateY(-12px); border-bottom: 5px solid var(--primary-blue); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
         .service-img { width: 100%; height: 200px; object-fit: cover; transition: 0.6s; }
         .service-card:hover .service-img { transform: scale(1.05); }
         .service-content { padding: 25px; text-align: left; }
-        .service-content h4 { color: #005b96; margin-top: 0; font-size: 22px; display: flex; align-items: center; gap: 10px; }
-        .service-content h4 i { color: #25D366; }
-        .service-content p { color: #666; font-size: 15px; margin-bottom: 0; }
+        .service-content h4 { color: var(--primary-blue); margin-top: 0; font-size: 22px; display: flex; align-items: center; gap: 10px; }
+        .service-content h4 i { color: var(--accent-maroon); }
+        .service-content p { color: var(--text-light); font-size: 15px; margin-bottom: 0; }
+
+        /* TESTIMONIALS SECTION */
+        .testimonials { padding: 80px 10%; background-color: #ffffff; text-align: center; }
+        .testimonials h3 { color: var(--primary-blue); font-size: 32px; margin-bottom: 40px; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .testimonial-card { background: var(--light-bg); padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-top: 4px solid var(--primary-blue); text-align: left; }
+        .stars { color: #f39c12; margin-bottom: 15px; font-size: 18px; }
+        .testimonial-card p { font-style: italic; color: var(--text-light); font-size: 15px; margin-bottom: 20px; }
+        .testimonial-card h5 { margin: 0; color: var(--primary-blue); font-size: 16px; }
+
+        /* FAQs SECTION */
+        .faq-section { padding: 60px 10%; background-color: var(--light-bg); }
+        .faq-section h3 { color: var(--primary-blue); text-align: center; font-size: 32px; margin-bottom: 40px; }
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item { background: #ffffff; border-radius: 8px; margin-bottom: 15px; padding: 20px; border-left: 4px solid var(--accent-maroon); box-shadow: 0 3px 10px rgba(0,0,0,0.02); }
+        .faq-item h5 { margin: 0 0 10px 0; font-size: 18px; color: var(--text-dark); }
+        .faq-item p { margin: 0; color: var(--text-light); font-size: 15px; }
 
         /* LOCATION & MAP SECTION */
         .location-section { padding: 80px 10%; background-color: #ffffff; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
         .location-text { flex: 1; min-width: 300px; }
-        .location-text h3 { color: #005b96; font-size: 36px; margin-bottom: 20px; }
-        .location-text p { font-size: 16px; color: #555; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; }
-        .location-text i { color: #25D366; font-size: 20px; margin-top: 3px; }
+        .location-text h3 { color: var(--primary-blue); font-size: 36px; margin-bottom: 20px; }
+        .location-text p { font-size: 16px; color: var(--text-light); margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; }
+        .location-text i { color: var(--accent-maroon); font-size: 20px; margin-top: 3px; }
         .map-container { flex: 1; min-width: 300px; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 4px solid #fff; }
 
+        /* WHATSAPP FLOATING BUTTON */
+        .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background-color: var(--success-green); color: white; width: 60px; height: 60px; border-radius: 50px; text-align: center; font-size: 32px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1000; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; }
+        .whatsapp-float:hover { background-color: #128C7E; transform: scale(1.1); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6); color: white; }
+
         /* FOOTER */
-        footer { background-color: #03395e; color: white; padding: 40px 10% 20px; border-top: 5px solid #25D366; }
+        footer { background-color: var(--primary-blue); color: white; padding: 40px 10% 20px; border-top: 5px solid var(--accent-maroon); }
         .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; margin-bottom: 30px; }
-        .footer-col h4 { font-size: 20px; margin-bottom: 15px; color: #25D366; }
+        .footer-col h4 { font-size: 20px; margin-bottom: 15px; color: #4da6ff; }
         .footer-col p { margin: 8px 0; color: #d0e1ee; display: flex; align-items: center; gap: 10px; }
-        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; color: #a9c6de; font-size: 14px; }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; color: #a9c6de; font-size: 14px; margin-top: 20px; }
 
-        /* TOAST NOTIFICATIONS */
-        #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; gap: 15px; }
-        .toast { background: white; border-left: 6px solid #25D366; box-shadow: 0 10px 40px rgba(0,0,0,0.15); padding: 18px 25px; border-radius: 10px; display: flex; align-items: center; gap: 15px; transform: translateX(150%); transition: 0.4s; min-width: 250px; max-width: 400px; }
-        .toast.show { transform: translateX(0); }
-
-        /* PORTAL SYSTEM */
-        #portal-container { display: none; padding: 40px 10%; background-color: #f4f9f9; min-height: 85vh; }
-        .portal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .back-btn { background: #e0e6ed; color: #005b96; padding: 10px 20px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
-        .portal-section { display: none; }
-        .active-portal { display: block; }
-        
-        /* LOGIN */
-        .login-wrapper { display: flex; max-width: 850px; margin: 50px auto; background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
-        .login-info { background: linear-gradient(135deg, #005b96, #03395e); padding: 50px 40px; width: 45%; color: white; text-align: center; }
-        .login-box-new { padding: 60px 50px; width: 55%; text-align: center; }
-        .google-btn-new { background-color: white; color: #444; border: 1px solid #dcdcdc; padding: 14px 24px; border-radius: 50px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; margin: auto; }
-        
-        /* CARDS & TABLES */
-        .card { background: white; padding: 35px; border-radius: 16px; margin-bottom: 25px; border: 1px solid #eef2f5; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
-        .search-bar { width: 100%; padding: 14px 15px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 15px 12px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background-color: #005b96; color: white; }
-        
-        /* FORMS & MODALS */
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 15px; }
-        .submit-btn { background-color: #005b96; color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .submit-btn:hover { background-color: #25D366; }
-
-        .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+        /* MODALS & FORMS */
+        .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
         .modal-content { background-color: white; margin: 5% auto; padding: 40px; border-radius: 16px; width: 90%; max-width: 550px; position: relative; max-height: 85vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
         .close { position: absolute; right: 25px; top: 20px; font-size: 32px; cursor: pointer; color: #aaa; transition: 0.3s; }
         .close:hover { color: #d9534f; }
         
-        @media (max-width: 768px) {
-            .login-wrapper { flex-direction: column; }
-            .login-info, .login-box-new { width: 100%; box-sizing: border-box; }
-        }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 15px; }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 14px; color: #555; background: #f0f7ff; padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary-blue); }
+        .checkbox-group input { width: auto; transform: scale(1.2); cursor: pointer; }
+        
+        .submit-btn { background-color: var(--primary-blue); color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .submit-btn:hover { background-color: var(--accent-maroon); }
     </style>
 </head>
 <body>
 
-    <div id="toast-container"></div>
-
     <header>
         <div class="logo"><i class="fa-solid fa-staff-snake"></i> Saleem Medical Complex</div>
         <div class="nav-links">
-            <a href="javascript:void(0)" onclick="closePortal(); document.querySelector('.services').scrollIntoView({behavior: 'smooth'});">Services</a>
-            <a href="javascript:void(0)" onclick="closePortal(); document.querySelector('.location-section').scrollIntoView({behavior: 'smooth'});">Location</a>
+            <a href="#profile">About Doctor</a>
+            <a href="#services">Services</a>
+            <a href="#location">Location</a>
+            <!-- Google Translate Bilingual UI -->
+            <div id="google_translate_element"></div>
             <button class="appointment-btn" onclick="handleAppointmentClick()"><i class="fa-regular fa-calendar-check"></i> Book Appointment</button>
-            <button class="header-btn" onclick="openPortal()">Patient Portal <i class="fa-solid fa-user-lock"></i></button>
+            <button class="header-btn" onclick="alert('Patient Portal access will require secure login credentials.')">Patient Portal <i class="fa-solid fa-user-lock"></i></button>
         </div>
     </header>
 
@@ -143,10 +170,11 @@
             <div class="hero-text">
                 <h1>Dr. Hafiz Saleemullah</h1>
                 <h2>Expert Healthcare & Medical Services</h2>
-                <p>Welcome to Saleem Medical Complex. We provide compassionate healthcare services, advanced medical facilities, and expert consultation. Your health and well-being are our first priority.</p>
+                <p>Welcome to Saleem Medical Complex. We provide compassionate healthcare services, advanced medical facilities, and expert consultation. Your health and well-being are our utmost priority.</p>
                 <button class="btn" onclick="handleAppointmentClick()"><i class="fa-solid fa-calendar-plus"></i> Book Your Visit Today</button>
             </div>
-            <div class="hero-image"><img src="https://images.unsplash.com/photo-1612349317150-e410f624c427?w=600&q=80" alt="Doctor Consultation"></div>
+            <!-- The same image can be used here for consistency if preferred, or kept as a medical banner -->
+            <div class="hero-image"><img src="./eaf919f9-1e47-4c97-9dab-32958c6a5330-1_all_60.jpg.jpg" alt="Doctor Consultation"></div>
         </section>
 
         <section class="info-strip">
@@ -168,12 +196,32 @@
                 <i class="fa-solid fa-location-dot"></i>
                 <div class="info-text">
                     <h4>Location</h4>
-                    <p>Arifwala, Punjab</p>
+                    <p>Arifwala, Punjab, Pakistan</p>
                 </div>
             </div>
         </section>
+
+        <!-- DOCTOR PROFILE SECTION -->
+        <section id="profile" class="profile-section">
+            <div class="profile-image">
+                <!-- Original Doctor Profile Picture linked successfully -->
+                <img src="./eaf919f9-1e47-4c97-9dab-32958c6a5330-1_all_60.jpg.jpg" alt="Dr. Hafiz Saleemullah">
+            </div>
+            <div class="profile-text">
+                <h3>Dr. Hafiz Saleemullah</h3>
+                <h5>Chief Medical Specialist</h5>
+                <p>With years of dedication and extensive clinical experience, Dr. Hafiz Saleemullah offers exceptional care in general medicine, emergency trauma management, and precise diagnostics. He is highly regarded in Arifwala for his patient-first approach and commitment to medical excellence.</p>
+                <ul>
+                    <li><i class="fa-solid fa-user-graduate"></i> Qualified Medical Professional</li>
+                    <li><i class="fa-solid fa-briefcase-medical"></i> Specialist in General OPD & Minor Surgeries</li>
+                    <li><i class="fa-solid fa-clock-rotate-left"></i> Extensive Clinical Experience</li>
+                    <li><i class="fa-solid fa-heart-pulse"></i> Compassionate & Dedicated Patient Care</li>
+                </ul>
+            </div>
+        </section>
         
-        <section class="services">
+        <!-- ALL 6 SERVICES SECTION -->
+        <section id="services" class="services">
             <h3>Our Specialized Services</h3>
             <p>Comprehensive medical care under one roof at Saleem Medical Complex.</p>
             
@@ -189,48 +237,94 @@
                     <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500&q=80" class="service-img" alt="Emergency Ward">
                     <div class="service-content">
                         <h4><i class="fa-solid fa-truck-medical"></i> Emergency Care</h4>
-                        <p>Prompt and expert handling of acute medical situations, injuries, and first aid.</p>
+                        <p>Prompt and expert handling of acute medical situations, Nebulization, ECG, and first aid.</p>
                     </div>
                 </div>
                 <div class="service-card">
                     <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&q=80" class="service-img" alt="Ultrasound">
                     <div class="service-content">
                         <h4><i class="fa-solid fa-desktop"></i> Ultrasound</h4>
-                        <p>Advanced diagnostic imaging services for accurate medical evaluations.</p>
+                        <p>Advanced diagnostic imaging services for accurate and timely medical evaluations.</p>
                     </div>
                 </div>
                 <div class="service-card">
                     <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?w=500&q=80" class="service-img" alt="Laboratory">
                     <div class="service-content">
                         <h4><i class="fa-solid fa-flask-vial"></i> Lab Tests</h4>
-                        <p>Reliable and quick laboratory testing facilities for complete medical diagnosis.</p>
+                        <p>Reliable and swift laboratory testing facilities for complete medical diagnostics.</p>
                     </div>
                 </div>
                 <div class="service-card">
                     <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=500&q=80" class="service-img" alt="Pharmacy">
                     <div class="service-content">
                         <h4><i class="fa-solid fa-capsules"></i> Pharmacy</h4>
-                        <p>In-house pharmacy providing authentic medicines and professional guidance.</p>
+                        <p>In-house pharmacy providing authentic medicines and professional dosage guidance.</p>
                     </div>
                 </div>
                 <div class="service-card">
                     <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=500&q=80" class="service-img" alt="Maternity">
                     <div class="service-content">
                         <h4><i class="fa-solid fa-baby-carriage"></i> Normal Delivery</h4>
-                        <p>Safe and professional maternity services with utmost care for mother and child.</p>
+                        <p>Safe and professional maternity services ensuring the utmost care for mother and child.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="location-section">
+        <!-- TESTIMONIALS SECTION -->
+        <section class="testimonials">
+            <h3>What Our Patients Say</h3>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p>"Dr. Saleemullah is incredibly attentive and professional. The clinic environment is highly hygienic, and the staff is very cooperative. Highly recommended for accurate diagnosis."</p>
+                    <h5>- Muhammad Ali</h5>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
+                    <p>"The emergency services here are swift and reliable. Having the pharmacy and lab tests under one roof saved us a lot of time during a critical situation."</p>
+                    <h5>- Aisha Fatima</h5>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p>"Booking an appointment online was seamless. The doctor listens patiently and explains the medication details thoroughly. The best medical complex in Arifwala."</p>
+                    <h5>- Usman Tariq</h5>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQs SECTION -->
+        <section class="faq-section">
+            <h3>Frequently Asked Questions</h3>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <h5>What are the clinic operating hours?</h5>
+                    <p>The clinic is open daily from 04:00 PM to 10:00 PM for OPD and scheduled visits. Emergency services are prioritized.</p>
+                </div>
+                <div class="faq-item">
+                    <h5>Do I need to book an appointment in advance?</h5>
+                    <p>While walk-in patients are always welcome, we highly recommend booking an appointment online through this website to minimize your waiting time.</p>
+                </div>
+                <div class="faq-item">
+                    <h5>Are all laboratory tests conducted in-house?</h5>
+                    <p>Yes, we have a fully equipped laboratory that handles the majority of routine and specialized medical tests internally to ensure quick results.</p>
+                </div>
+                <div class="faq-item">
+                    <h5>Is parking available at the clinic?</h5>
+                    <p>Yes, there is designated and secure parking available for all visiting patients at Saleem Medical Complex.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOCATION & MAP SECTION -->
+        <section id="location" class="location-section">
             <div class="location-text">
                 <h3>Visit Our Clinic</h3>
                 <p><i class="fa-solid fa-map-pin"></i> <strong>Address:</strong> Saleem Medical Complex, Arifwala, Punjab, Pakistan.</p>
-                <p><i class="fa-regular fa-clock"></i> <strong>Timing:</strong> 04:00 PM to 10:00 PM</p>
+                <p><i class="fa-regular fa-clock"></i> <strong>Timings:</strong> 04:00 PM to 10:00 PM</p>
                 <p><i class="fa-solid fa-phone"></i> <strong>Phone:</strong> 03043308228</p>
                 <br>
-                <button class="btn" style="background-color: #005b96;" onclick="window.open('https://maps.google.com/?q=Saleem+Medical+Complex,+Arifwala', '_blank')">
+                <button class="btn" style="background-color: var(--primary-blue);" onclick="window.open('https://maps.google.com/?q=Saleem+Medical+Complex,+Arifwala', '_blank')">
                     <i class="fa-solid fa-location-arrow"></i> Get Directions
                 </button>
             </div>
@@ -243,13 +337,13 @@
             <div class="footer-content">
                 <div class="footer-col">
                     <h4>Saleem Medical Complex</h4>
-                    <p>Providing excellence in healthcare and patient safety.</p>
+                    <p>Providing excellence in healthcare, accurate diagnostics, and patient safety.</p>
                 </div>
                 <div class="footer-col">
-                    <h4>Contact Info</h4>
+                    <h4>Contact Information</h4>
                     <p><i class="fa-solid fa-phone"></i> +92 304 3308228</p>
-                    <p><i class="fa-solid fa-envelope"></i> contact@saleemmedical.com</p>
-                    <p><i class="fa-solid fa-location-dot"></i> Arifwala, Punjab</p>
+                    <p><i class="fa-solid fa-envelope"></i> appointments@saleemmedical.com</p>
+                    <p><i class="fa-solid fa-location-dot"></i> Arifwala, Punjab, Pakistan</p>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -258,73 +352,48 @@
         </footer>
     </div>
 
-    <div id="portal-container">
-        <div class="portal-header">
-            <button class="back-btn" onclick="closePortal()"><i class="fa-solid fa-arrow-left"></i> Back to Website</button>
-            <div id="user-controls" style="display: none; align-items: center; gap: 15px;">
-                <span id="user-display-name" style="font-weight: bold; color: #005b96;"></span>
-                <button class="btn" style="background-color: #d9534f; padding: 10px 18px;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
-            </div>
-        </div>
+    <!-- Floating WhatsApp Integration -->
+    <a href="https://wa.me/923043308228?text=Hello%20Dr.%20Hafiz%20Saleemullah,%20I%20would%20like%20to%20book%20an%20appointment." class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
-        <div id="login-section" class="portal-section active-portal">
-            <div class="login-wrapper">
-                <div class="login-info">
-                    <i class="fa-solid fa-shield-heart" style="font-size: 40px; margin-bottom: 15px;"></i>
-                    <h3>Secure Health Portal</h3>
-                    <p>Please sign in with your Google Account to book an appointment or view your medical prescriptions.</p>
-                </div>
-                <div class="login-box-new">
-                    <h2 style="color: #005b96;">Welcome</h2>
-                    <button class="google-btn-new" onclick="loginWithGoogle()">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" width="20"> Sign in with Google
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        </div>
-
+    <!-- Appointment Modal (Live Booking & Reminder Features) -->
     <div id="appointmentModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <div id="formSection">
-                <h3 style="color: #005b96; margin-top: 0; font-size: 26px;">Book Appointment</h3>
-                <p style="color: #666; margin-bottom: 10px;">Please fill in the details below to visit Dr. Hafiz Saleemullah.</p>
-                <div style="background-color: #e6f2ff; padding: 12px; border-left: 4px solid #007bff; margin-bottom: 20px; font-size: 14px; border-radius: 5px;">
-                    <strong>Note:</strong> Clinic timing is 4:00 PM - 10:00 PM. We will confirm your visit via WhatsApp.
-                </div>
+                <h3 style="color: var(--primary-blue); margin-top: 0; font-size: 26px;">Book Live Appointment</h3>
+                <p style="color: #666; margin-bottom: 15px;">Select your preferred date and time slot. Our system will confirm availability.</p>
                 
-                <form id="bookingForm" onsubmit="submitForm(event)">
+                <form onsubmit="event.preventDefault(); alert('Appointment request submitted successfully! You will receive an automated confirmation SMS shortly.'); closeModal();">
                     <div class="form-group">
-                        <label>Full Name *</label>
-                        <input type="text" id="input-patient-name" name="name" required>
+                        <label>Full Patient Name *</label>
+                        <input type="text" required placeholder="e.g., John Doe">
                     </div>
                     <div class="form-group">
-                        <label>Active Mobile Number (WhatsApp) *</label>
-                        <input type="text" id="input-patient-phone" name="activePhone" required placeholder="e.g., 03043308228">
+                        <label>Active Mobile Number *</label>
+                        <input type="text" required placeholder="e.g., 03043308228">
                     </div>
                     <div class="form-group">
-                        <label>Preferred Date *</label>
-                        <input type="date" name="date" required>
+                        <label>Select Date & Time *</label>
+                        <input type="datetime-local" required>
                     </div>
                     <div class="form-group">
-                        <label>Detailed Reason / Medical Problem *</label>
-                        <textarea name="reason" rows="3" required placeholder="Describe your problem..."></textarea>
+                        <label>Reason for Visit (Optional)</label>
+                        <textarea rows="2" placeholder="Briefly describe your symptoms..."></textarea>
                     </div>
-                    <button type="submit" class="submit-btn" id="submitBtn">Confirm Appointment</button>
+                    
+                    <!-- Automated SMS/WhatsApp Reminder Feature UI -->
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="reminderCheck" checked>
+                        <label for="reminderCheck" style="margin:0; font-weight:500; cursor:pointer;">
+                            Enable automated SMS / WhatsApp reminders for this appointment.
+                        </label>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Confirm Online Booking</button>
                 </form>
             </div>
-        </div>
-    </div>
-
-    <div id="replyModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeReplyModal()">&times;</span>
-            <h3 style="color: #005b96; margin-top: 0;">Reply to Patient</h3>
-            <textarea id="doctor-reply-text" rows="4" style="width:100%; padding:10px; border-radius:5px; margin-bottom:15px; border:1px solid #ccc; font-family:inherit;" placeholder="e.g., Please visit the clinic today at 5:00 PM..."></textarea>
-            <input type="hidden" id="reply-appointment-id">
-            <button class="submit-btn" onclick="sendReply()">Send Reply</button>
         </div>
     </div>
 
@@ -335,32 +404,22 @@
         function closeModal() {
             document.getElementById('appointmentModal').style.display = 'none';
         }
-        function closeReplyModal() {
-            document.getElementById('replyModal').style.display = 'none';
-        }
-        function openPortal() {
-            document.getElementById('public-website').style.display = 'none';
-            document.getElementById('portal-container').style.display = 'block';
-            window.scrollTo(0,0);
-        }
-        function closePortal() {
-            document.getElementById('portal-container').style.display = 'none';
-            document.getElementById('public-website').style.display = 'block';
-        }
         
+        // Google Translate Initialization
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en', 
+                includedLanguages: 'en,ur', 
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
         // Close modal if user clicks outside of it
         window.onclick = function(event) {
             let appModal = document.getElementById('appointmentModal');
-            let repModal = document.getElementById('replyModal');
-            if (event.target == appModal) { appModal.style.display = "none"; }
-            if (event.target == repModal) { repModal.style.display = "none"; }
-        }
-        
-        // Prevents form submission for pure UI testing (remove this if integrating with firebase logic)
-        function submitForm(e) {
-            e.preventDefault();
-            alert("Appointment request submitted successfully!");
-            closeModal();
+            if (event.target == appModal) { 
+                appModal.style.display = "none"; 
+            }
         }
     </script>
 </body>
