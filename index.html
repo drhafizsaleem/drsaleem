@@ -28,26 +28,33 @@
             --text-light: #666666;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: var(--light-bg); color: var(--text-dark); line-height: 1.6; scroll-behavior: smooth; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: var(--light-bg); color: var(--text-dark); line-height: 1.6; scroll-behavior: smooth; top: 0 !important; }
         
+        /* Hiding Default Google Translate Header/Frames */
+        .goog-te-banner-frame.skiptranslate { display: none !important; } 
+        body { top: 0px !important; }
+        #google_translate_element { display: none !important; }
+
         /* HEADER */
         header { background-color: #ffffff; padding: 15px 8%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 1000; }
-        .logo { display: flex; align-items: center; font-size: 22px; font-weight: 800; color: var(--primary-blue); letter-spacing: 0.5px; text-transform: uppercase; }
+        .logo { display: flex; align-items: center; font-size: 22px; font-weight: 800; color: var(--primary-blue); letter-spacing: 0.5px; text-transform: uppercase; text-decoration: none; transition: 0.3s; }
+        .logo:hover { color: var(--accent-maroon); }
         .logo i { color: var(--accent-maroon); margin-right: 12px; font-size: 26px; }
-        .nav-links { display: flex; align-items: center; gap: 20px; }
-        .nav-links a { text-decoration: none; color: var(--primary-blue); font-weight: 600; font-size: 16px; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent-maroon); }
         
-        /* Language Translator Positioning */
-        #google_translate_element { margin-right: 10px; }
-        .goog-te-gadget-simple { border-radius: 8px !important; padding: 5px !important; border: 1px solid var(--primary-blue) !important; font-family: inherit !important; }
+        .nav-links { display: flex; align-items: center; gap: 15px; }
+        .nav-links a.nav-item { text-decoration: none; color: var(--primary-blue); font-weight: 600; font-size: 16px; transition: 0.3s; }
+        .nav-links a.nav-item:hover { color: var(--accent-maroon); }
+        
+        /* Language Toggle Button */
+        .lang-toggle-btn { background-color: #f0f7ff; border: 2px solid var(--primary-blue); color: var(--primary-blue); padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-family: inherit; }
+        .lang-toggle-btn:hover { background-color: var(--primary-blue); color: white; }
 
         .appointment-btn { background-color: transparent; border: 2px solid var(--primary-blue); color: var(--primary-blue); padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
         .appointment-btn:hover { background-color: var(--primary-blue); color: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 51, 102, 0.2); }
         .header-btn { background-color: var(--primary-blue); color: white; padding: 10px 22px; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
         .header-btn:hover { background-color: var(--accent-maroon); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(128, 0, 0, 0.3); }
         
-        @media (max-width: 900px) {
+        @media (max-width: 1000px) {
             header { flex-direction: column; gap: 15px; padding: 15px 5%; }
             .nav-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
         }
@@ -73,7 +80,6 @@
         /* DOCTOR PROFILE SECTION */
         .profile-section { padding: 80px 10%; background-color: #ffffff; display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
         .profile-image { flex: 1; min-width: 300px; text-align: center; }
-        /* DOCTOR'S ORIGINAL IMAGE ADDED HERE */
         .profile-image img { width: 100%; max-width: 300px; border-radius: 50%; border: 5px solid var(--primary-blue); box-shadow: 0 10px 25px rgba(0,0,0,0.1); object-fit: cover; }
         .profile-text { flex: 2; min-width: 300px; }
         .profile-text h3 { color: var(--primary-blue); font-size: 32px; margin-bottom: 10px; }
@@ -152,13 +158,24 @@
 <body>
 
     <header>
-        <div class="logo"><i class="fa-solid fa-staff-snake"></i> Saleem Medical Complex</div>
+        <!-- Clickable Logo Navigates to Top/Home -->
+        <a href="#" class="logo">
+            <i class="fa-solid fa-staff-snake"></i> Saleem Medical Complex
+        </a>
+        
         <div class="nav-links">
-            <a href="#profile">About Doctor</a>
-            <a href="#services">Services</a>
-            <a href="#location">Location</a>
-            <!-- Google Translate Bilingual UI -->
+            <a href="#profile" class="nav-item">About Doctor</a>
+            <a href="#services" class="nav-item">Services</a>
+            <a href="#location" class="nav-item">Location</a>
+            
+            <!-- Hidden Native Google Translate Dropdown -->
             <div id="google_translate_element"></div>
+            
+            <!-- Custom Language Toggle Button -->
+            <button class="lang-toggle-btn" id="langToggleButton" onclick="toggleLanguage()">
+                <i class="fa-solid fa-language"></i> اردو
+            </button>
+
             <button class="appointment-btn" onclick="handleAppointmentClick()"><i class="fa-regular fa-calendar-check"></i> Book Appointment</button>
             <button class="header-btn" onclick="alert('Patient Portal access will require secure login credentials.')">Patient Portal <i class="fa-solid fa-user-lock"></i></button>
         </div>
@@ -173,7 +190,6 @@
                 <p>Welcome to Saleem Medical Complex. We provide compassionate healthcare services, advanced medical facilities, and expert consultation. Your health and well-being are our utmost priority.</p>
                 <button class="btn" onclick="handleAppointmentClick()"><i class="fa-solid fa-calendar-plus"></i> Book Your Visit Today</button>
             </div>
-            <!-- The same image can be used here for consistency if preferred, or kept as a medical banner -->
             <div class="hero-image"><img src="./eaf919f9-1e47-4c97-9dab-32958c6a5330-1_all_60.jpg.jpg" alt="Doctor Consultation"></div>
         </section>
 
@@ -204,7 +220,6 @@
         <!-- DOCTOR PROFILE SECTION -->
         <section id="profile" class="profile-section">
             <div class="profile-image">
-                <!-- Original Doctor Profile Picture linked successfully -->
                 <img src="./eaf919f9-1e47-4c97-9dab-32958c6a5330-1_all_60.jpg.jpg" alt="Dr. Hafiz Saleemullah">
             </div>
             <div class="profile-text">
@@ -412,6 +427,28 @@
                 includedLanguages: 'en,ur', 
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE
             }, 'google_translate_element');
+        }
+
+        // Custom Language Toggle Logic
+        let isUrdu = false;
+        function toggleLanguage() {
+            var combo = document.querySelector('.goog-te-combo');
+            var btn = document.getElementById('langToggleButton');
+            
+            if (combo) {
+                if (!isUrdu) {
+                    combo.value = 'ur';
+                    isUrdu = true;
+                    btn.innerHTML = '<i class="fa-solid fa-language"></i> English';
+                } else {
+                    combo.value = 'en';
+                    isUrdu = false;
+                    btn.innerHTML = '<i class="fa-solid fa-language"></i> اردو';
+                }
+                combo.dispatchEvent(new Event('change'));
+            } else {
+                alert("Translation service is currently loading. Please try again in a second.");
+            }
         }
 
         // Close modal if user clicks outside of it
