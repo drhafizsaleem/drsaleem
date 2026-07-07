@@ -6,14 +6,16 @@
     <title>Dr. Hafiz Saleemullah | Saleem Medical Complex</title>
     <link rel="icon" href="./favicon.png" type="image/png">
     
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Translate Script -->
     <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <style>
-        /* General Setup */
+        /* ================= GENERAL SETUP ================= */
         :root {
             --primary-blue: #003366;
             --accent-maroon: #800000;
@@ -25,12 +27,11 @@
 
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: var(--light-bg); color: var(--text-dark); line-height: 1.6; scroll-behavior: smooth; top: 0 !important; }
         
-        /* Hiding Default Google Translate Header */
         .goog-te-banner-frame.skiptranslate { display: none !important; } 
         body { top: 0px !important; }
         #google_translate_element { display: none !important; }
 
-        /* HEADER */
+        /* ================= HEADER ================= */
         header { background-color: #ffffff; padding: 15px 8%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 1000; }
         .logo { display: flex; align-items: center; font-size: 22px; font-weight: 800; color: var(--primary-blue); letter-spacing: 0.5px; text-transform: uppercase; text-decoration: none; transition: 0.3s; }
         .logo:hover { color: var(--accent-maroon); }
@@ -54,70 +55,71 @@
             .nav-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
         }
 
-        /* HERO SECTION */
+        /* ================= HERO SECTION ================= */
         .hero { background: linear-gradient(135deg, var(--primary-blue), #001f4d); color: white; padding: 80px 10%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; position: relative; overflow: hidden; }
         .hero-text { max-width: 55%; min-width: 300px; z-index: 1; }
         .hero-text h1 { font-size: 46px; margin-bottom: 15px; font-weight: 800; line-height: 1.2; }
+        .hero-text h2 { font-size: 24px; font-weight: 400; color: #4da6ff; margin-top: 0; margin-bottom: 20px;}
         .hero-text p { font-size: 18px; margin-bottom: 35px; line-height: 1.8; color: #d0e1ee; }
         .btn { background-color: var(--accent-maroon); color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; }
         .btn:hover { background-color: #990000; transform: translateY(-3px); }
         .hero-image { text-align: center; z-index: 1; margin-top: 20px; }
         .hero-image img { width: 100%; max-width: 350px; border-radius: 20px; border: 6px solid rgba(255,255,255,0.15); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
 
-        /* PORTAL SYSTEM UI */
+        /* ================= INFO STRIP & OTHER SECTIONS (KEPT SAME AS PREVIOUS) ================= */
+        .info-strip { background-color: #ffffff; padding: 40px 10%; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid #eaeaea; }
+        .info-item { display: flex; align-items: center; gap: 15px; }
+        .info-item i { font-size: 36px; color: var(--accent-maroon); }
+        .info-text h4 { margin: 0; font-size: 18px; color: var(--primary-blue); }
+        .info-text p { margin: 5px 0 0; color: var(--text-light); font-size: 15px; font-weight: 500; }
+
+        .profile-section { padding: 80px 10%; background-color: #ffffff; display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+        .profile-image img { width: 100%; max-width: 300px; border-radius: 50%; border: 5px solid var(--primary-blue); object-fit: cover; }
+        .profile-text h3 { color: var(--primary-blue); font-size: 32px; margin-bottom: 10px; }
+        .profile-text h5 { color: var(--accent-maroon); font-size: 18px; margin-bottom: 20px; }
+        
+        .services { padding: 90px 8%; background-color: var(--light-bg); text-align: center; }
+        .services h3 { color: var(--primary-blue); font-size: 38px; }
+        .service-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .service-card { background: white; border-radius: 16px; overflow: hidden; border: 1px solid #eef2f5; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .service-img { width: 100%; height: 200px; object-fit: cover; }
+        .service-content { padding: 25px; text-align: left; }
+        .service-content h4 { color: var(--primary-blue); }
+
+        footer { background-color: var(--primary-blue); color: white; padding: 40px 10% 20px; border-top: 5px solid var(--accent-maroon); text-align: center; }
+
+        /* ================= PORTAL SYSTEM UI ================= */
         #portal-container { display: none; padding: 60px 10%; background-color: #f4f9f9; min-height: 80vh; }
         .portal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #ddd; padding-bottom: 15px; }
-        .back-btn { background: #e0e6ed; color: var(--primary-blue); padding: 10px 20px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .back-btn { background: #e0e6ed; color: var(--primary-blue); padding: 10px 20px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
         
         .login-wrapper { display: flex; max-width: 850px; margin: 20px auto; background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
         .login-info { background: linear-gradient(135deg, var(--primary-blue), #001f4d); padding: 50px 40px; width: 45%; color: white; text-align: center; display: flex; flex-direction: column; justify-content: center; }
         .login-box { padding: 60px 50px; width: 55%; text-align: center; display: flex; flex-direction: column; justify-content: center; }
-        .login-btn { background-color: white; color: #444; border: 1px solid #dcdcdc; padding: 14px 24px; border-radius: 50px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; margin: auto; font-size: 16px; transition: 0.3s; }
-        .login-btn:hover { background-color: #f0f0f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .login-btn { background-color: white; color: #444; border: 1px solid #dcdcdc; padding: 14px 24px; border-radius: 50px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; margin: auto; transition: 0.3s; }
+        .login-btn:hover { background-color: #f0f0f0; }
 
-        /* DASHBOARD UI */
         #dashboard-section { display: none; }
         .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px; }
-        .dash-card { background: white; padding: 30px; border-radius: 12px; border-top: 4px solid var(--primary-blue); box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; }
-        .dash-card h4 { color: var(--primary-blue); font-size: 20px; margin-bottom: 15px; }
+        .dash-card { background: white; padding: 30px; border-radius: 12px; border-top: 4px solid var(--primary-blue); text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
 
-        /* MODALS & FORMS */
+        /* ================= MODALS & FORMS ================= */
         .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(5px); }
-        .modal-content { background-color: white; margin: 5% auto; padding: 40px; border-radius: 16px; width: 90%; max-width: 550px; position: relative; max-height: 85vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0,0,0,0.2); animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .close { position: absolute; right: 25px; top: 20px; font-size: 32px; cursor: pointer; color: #aaa; transition: 0.3s; }
+        .modal-content { background-color: white; margin: 5% auto; padding: 40px; border-radius: 16px; width: 90%; max-width: 550px; position: relative; max-height: 85vh; overflow-y: auto; }
+        .close { position: absolute; right: 25px; top: 20px; font-size: 32px; cursor: pointer; color: #aaa; }
         .close:hover { color: #d9534f; }
         
         .form-group { margin-bottom: 20px; text-align: left; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
-        .form-group input, .form-group textarea { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 15px; }
-        .submit-btn { background-color: var(--primary-blue); color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .submit-btn:hover { background-color: var(--accent-maroon); }
+        .form-group input, .form-group textarea { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
+        .submit-btn { background-color: var(--primary-blue); color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; }
 
-        /* ADVANCED TOAST NOTIFICATION */
+        /* ================= TOAST NOTIFICATION ================= */
         #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; gap: 15px; }
-        .toast { background: white; border-left: 6px solid; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 20px; border-radius: 10px; display: flex; align-items: center; gap: 15px; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); min-width: 300px; max-width: 400px; position: relative; overflow: hidden; }
+        .toast { background: white; border-left: 6px solid; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 20px; border-radius: 10px; display: flex; align-items: center; gap: 15px; transform: translateX(120%); transition: 0.4s; min-width: 300px; position: relative; overflow: hidden; }
         .toast.show { transform: translateX(0); }
-        .toast .toast-icon { font-size: 24px; }
-        .toast-content { flex: 1; }
-        .toast-title { font-weight: bold; margin-bottom: 3px; font-size: 16px; }
-        .toast-msg { font-size: 14px; color: #666; }
-        
-        .toast.success { border-left-color: var(--success-green); }
-        .toast.success .toast-icon { color: var(--success-green); }
-        
-        .toast.error { border-left-color: #d9534f; }
-        .toast.error .toast-icon { color: #d9534f; }
-
-        .toast.info { border-left-color: var(--primary-blue); }
-        .toast.info .toast-icon { color: var(--primary-blue); }
-
-        .toast-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: rgba(0,0,0,0.1); width: 100%; }
-        .toast-progress::before { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 100%; background: inherit; animation: progress 3s linear forwards; }
-        @keyframes progress { 100% { width: 0; } }
-
-        /* FOOTER */
-        footer { background-color: var(--primary-blue); color: white; padding: 40px 10% 20px; border-top: 5px solid var(--accent-maroon); text-align: center; }
+        .toast.success { border-left-color: var(--success-green); color: var(--success-green); }
+        .toast.error { border-left-color: #d9534f; color: #d9534f; }
     </style>
 </head>
 <body>
@@ -129,91 +131,96 @@
             <i class="fa-solid fa-staff-snake"></i> Saleem Medical Complex
         </a>
         <div class="nav-links">
+            <a href="#profile" class="nav-item" onclick="closePortal()">About Doctor</a>
+            <a href="#services" class="nav-item" onclick="closePortal()">Services</a>
+            
             <div id="google_translate_element"></div>
             <button class="lang-toggle-btn" id="langToggleButton" onclick="toggleLanguage()">
                 <i class="fa-solid fa-language"></i> اردو
             </button>
+            
             <button class="appointment-btn" onclick="handleAppointmentClick()"><i class="fa-regular fa-calendar-check"></i> Book Appointment</button>
             <button class="header-btn" id="portalNavBtn" onclick="openPortal()">Patient Portal <i class="fa-solid fa-user-lock"></i></button>
         </div>
     </header>
 
-    <!-- PUBLIC WEBSITE CONTENT -->
     <div id="public-website">
         <section class="hero">
             <div class="hero-text">
                 <h1>Dr. Hafiz Saleemullah</h1>
                 <h2>Expert Healthcare & Medical Services</h2>
-                <p>Compassionate healthcare services, advanced medical facilities, and expert consultation. Your health is our utmost priority.</p>
+                <p>Compassionate healthcare services, advanced medical facilities, and expert consultation. Your health and well-being are our utmost priority.</p>
                 <button class="btn" onclick="handleAppointmentClick()"><i class="fa-solid fa-calendar-plus"></i> Book Your Visit Today</button>
             </div>
             <div class="hero-image"><img src="./eaf919f9-1e47-4c97-9dab-32958c6a5330-1_all_60.jpg.jpg" alt="Dr. Hafiz Saleemullah"></div>
         </section>
+
+        <section id="profile" class="profile-section">
+            <div class="profile-image">
+                <img src="./eaf919f9-1e47-4c97-9dab-32958c6a5330-1_all_60.jpg.jpg" alt="Dr. Hafiz Saleemullah">
+            </div>
+            <div class="profile-text">
+                <h3>Dr. Hafiz Saleemullah</h3>
+                <h5>Chief Medical Specialist</h5>
+                <p>With years of dedication and extensive clinical experience, Dr. Hafiz Saleemullah offers exceptional care in general medicine, emergency trauma management, and precise diagnostics.</p>
+            </div>
+        </section>
         
         <footer>
-            <div style="text-align: center;">
-                <h4>Saleem Medical Complex</h4>
-                <p><i class="fa-solid fa-phone"></i> +92 304 3308228 | Arifwala, Punjab, Pakistan</p>
-                <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">&copy; 2026 Saleem Medical Complex.</p>
-            </div>
+            <h4>Saleem Medical Complex</h4>
+            <p>Arifwala, Punjab, Pakistan | Phone: +92 304 3308228</p>
         </footer>
     </div>
 
-    <!-- PATIENT PORTAL SYSTEM -->
     <div id="portal-container">
         <div class="portal-header">
             <button class="back-btn" onclick="closePortal()"><i class="fa-solid fa-arrow-left"></i> Back to Home</button>
             <div id="user-controls" style="display: none; align-items: center; gap: 15px;">
-                <span id="user-display-name" style="font-weight: bold; color: var(--primary-blue);">Patient Area</span>
-                <button class="btn" style="background-color: #d9534f; padding: 8px 15px; font-size: 14px;" onclick="simulateLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                <span id="user-display-name" style="font-weight: bold; color: var(--primary-blue);"></span>
+                <button class="btn" style="background-color: #d9534f; padding: 8px 15px;" onclick="logoutWithGoogle()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
             </div>
         </div>
 
-        <!-- Login Section -->
         <div id="login-section">
             <div class="login-wrapper">
                 <div class="login-info">
                     <i class="fa-solid fa-shield-heart" style="font-size: 45px; margin-bottom: 20px;"></i>
                     <h3 style="font-size: 24px; margin-bottom: 10px;">Secure Health Portal</h3>
-                    <p style="font-size: 15px; opacity: 0.9;">Sign in to securely book appointments and access your electronic medical records.</p>
+                    <p style="font-size: 15px;">Sign in to securely book appointments and access your electronic medical records.</p>
                 </div>
                 <div class="login-box">
                     <h2 style="color: var(--primary-blue); margin-top: 0;">Welcome Back</h2>
                     <p style="color: #666; margin-bottom: 30px;">Login to continue</p>
-                    <button class="login-btn" onclick="simulateLogin()">
+                    <button class="login-btn" onclick="loginWithGoogle()">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" width="20"> Continue with Google
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Dashboard Section -->
         <div id="dashboard-section">
             <h2 style="color: var(--primary-blue);">Welcome to your Dashboard</h2>
             <div class="dashboard-cards">
                 <div class="dash-card">
                     <i class="fa-regular fa-calendar-check" style="font-size: 40px; color: var(--success-green); margin-bottom: 15px;"></i>
                     <h4>New Appointment</h4>
-                    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Schedule a new visit with Dr. Hafiz Saleemullah.</p>
                     <button class="btn" style="width: 100%;" onclick="openAppointmentModal()">Book Now</button>
                 </div>
                 <div class="dash-card">
                     <i class="fa-solid fa-file-prescription" style="font-size: 40px; color: var(--primary-blue); margin-bottom: 15px;"></i>
                     <h4>My Prescriptions</h4>
-                    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">View your past medical records and prescriptions.</p>
-                    <button class="btn" style="width: 100%; background-color: #888;" onclick="showToast('No past records found.', 'info')">View Records</button>
+                    <button class="btn" style="width: 100%; background-color: #888;" onclick="showToast('Loading records...', 'info')">View Records</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Appointment Modal -->
     <div id="appointmentModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeAppointmentModal()">&times;</span>
+            <span class="close" onclick="closeAppointmentModal()">×</span>
             <div id="formSection">
-                <h3 style="color: var(--primary-blue); margin-top: 0; font-size: 24px;"><i class="fa-solid fa-calendar-plus"></i> Book Live Appointment</h3>
-                <p style="color: #666; margin-bottom: 15px; font-size: 14px;">Our system will instantly verify availability and notify the doctor.</p>
+                <h3 style="color: var(--primary-blue); margin-top: 0; font-size: 24px;">Book Live Appointment</h3>
+                <p style="color: #666; font-size: 14px;">Details will be saved directly to our secure Excel database.</p>
                 
                 <form id="bookingForm" onsubmit="submitAppointmentForm(event)">
                     <div class="form-group">
@@ -232,23 +239,65 @@
                         <label>Reason for Visit</label>
                         <textarea id="patReason" rows="2" placeholder="Briefly describe your symptoms..."></textarea>
                     </div>
-                    <button type="submit" class="submit-btn" id="submitBtn">Confirm & Send Request</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">Save Appointment</button>
                 </form>
             </div>
         </div>
     </div>
 
     <script>
-        // Set minimum date to strictly prevent past bookings
+        /* ==========================================
+           1. FIREBASE CONFIGURATION (PASTE YOUR KEYS HERE)
+           ========================================== */
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        /* ==========================================
+           2. GOOGLE SHEETS / EXCEL WEB APP URL
+           ========================================== */
+        const GOOGLE_SHEET_API_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Paste your script.google.com/macros/s/... url here
+
+
+        // UI Functions
+        let currentUser = null;
+
         document.addEventListener('DOMContentLoaded', function() {
             const dateInput = document.getElementById('patDate');
             const now = new Date();
             now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
             dateInput.min = now.toISOString().slice(0, 16);
-        });
 
-        // Auth State Simulation
-        let isLoggedIn = false;
+            // Listen for Auth State Changes
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    currentUser = user;
+                    document.getElementById('user-display-name').innerText = user.displayName || user.email;
+                    document.getElementById('login-section').style.display = 'none';
+                    document.getElementById('dashboard-section').style.display = 'block';
+                    document.getElementById('user-controls').style.display = 'flex';
+                    document.getElementById('portalNavBtn').innerHTML = 'Dashboard <i class="fa-solid fa-user-check"></i>';
+                } else {
+                    currentUser = null;
+                    document.getElementById('dashboard-section').style.display = 'none';
+                    document.getElementById('user-controls').style.display = 'none';
+                    document.getElementById('login-section').style.display = 'block';
+                    document.getElementById('portalNavBtn').innerHTML = 'Patient Portal <i class="fa-solid fa-user-lock"></i>';
+                }
+            });
+        });
 
         function openPortal() {
             document.getElementById('public-website').style.display = 'none';
@@ -261,28 +310,25 @@
             document.getElementById('public-website').style.display = 'block';
         }
 
-        function simulateLogin() {
-            showToast('Authentication Successful', 'success');
-            isLoggedIn = true;
-            document.getElementById('login-section').style.display = 'none';
-            document.getElementById('dashboard-section').style.display = 'block';
-            document.getElementById('user-controls').style.display = 'flex';
-            document.getElementById('portalNavBtn').innerHTML = 'Dashboard <i class="fa-solid fa-user-check"></i>';
+        // Real Google Login
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider).then((result) => {
+                showToast('Login Successful!', 'success');
+            }).catch((error) => {
+                showToast(error.message, 'error');
+            });
         }
 
-        function simulateLogout() {
-            isLoggedIn = false;
-            document.getElementById('dashboard-section').style.display = 'none';
-            document.getElementById('user-controls').style.display = 'none';
-            document.getElementById('login-section').style.display = 'block';
-            document.getElementById('portalNavBtn').innerHTML = 'Patient Portal <i class="fa-solid fa-user-lock"></i>';
-            showToast('Logged out securely', 'info');
-            closePortal();
+        function logoutWithGoogle() {
+            auth.signOut().then(() => {
+                showToast('Logged out securely', 'info');
+                closePortal();
+            });
         }
 
-        // Restrict Appointment Booking to Logged-in Users Only
         function handleAppointmentClick() {
-            if (!isLoggedIn) {
+            if (!currentUser) {
                 showToast('Authentication Required. Please log in first.', 'error');
                 openPortal();
             } else {
@@ -290,93 +336,83 @@
             }
         }
 
-        function openAppointmentModal() {
-            document.getElementById('appointmentModal').style.display = 'block';
-        }
+        function openAppointmentModal() { document.getElementById('appointmentModal').style.display = 'block'; }
+        function closeAppointmentModal() { document.getElementById('appointmentModal').style.display = 'none'; }
 
-        function closeAppointmentModal() {
-            document.getElementById('appointmentModal').style.display = 'none';
-        }
-
-        // Form Submit & Notifications Logic
+        // EXCEL / DATABASE SUBMISSION LOGIC
         function submitAppointmentForm(event) {
             event.preventDefault();
             
             const btn = document.getElementById('submitBtn');
-            btn.innerHTML = 'Verifying Slot... <i class="fa-solid fa-spinner fa-spin"></i>';
+            btn.innerHTML = 'Saving to Database... <i class="fa-solid fa-spinner fa-spin"></i>';
             btn.disabled = true;
 
-            setTimeout(() => {
-                // Simulate Double Booking Check
-                const randomCheck = Math.random();
-                if (randomCheck < 0.1) {
-                    showToast('Slot unavailable. Please select a different time.', 'error');
-                    btn.innerHTML = 'Confirm & Send Request';
-                    btn.disabled = false;
-                    return;
-                }
+            const name = document.getElementById('patName').value;
+            const phone = document.getElementById('patPhone').value;
+            const dateRaw = document.getElementById('patDate').value;
+            const reason = document.getElementById('patReason').value || 'Not specified';
+            const formattedDate = new Date(dateRaw).toLocaleString();
+            
+            // Prepare Data for Google Sheets
+            const formData = new URLSearchParams();
+            formData.append('name', name);
+            formData.append('phone', phone);
+            formData.append('date', formattedDate);
+            formData.append('reason', reason);
+            formData.append('email', currentUser.email);
+            formData.append('uid', currentUser.uid);
 
-                const name = document.getElementById('patName').value;
-                const phone = document.getElementById('patPhone').value;
-                const dateRaw = document.getElementById('patDate').value;
-                const reason = document.getElementById('patReason').value || 'Not specified';
-                
-                const formattedDate = new Date(dateRaw).toLocaleString();
-
-                // 1. WhatsApp API Link Generation for Doctor Notification
-                const whatsappMsg = `*New Appointment Alert*\n\n*Patient:* ${name}\n*Contact:* ${phone}\n*Date/Time:* ${formattedDate}\n*Reason:* ${reason}\n\n_Generated via Secure Portal_`;
-                const whatsappUrl = `https://wa.me/923043308228?text=${encodeURIComponent(whatsappMsg)}`;
-
-                // 2. Email Mailto Link Generation (Alternative notification trigger)
-                const emailSubj = `New Appointment: ${name}`;
-                const emailBody = `Patient Details:\nName: ${name}\nPhone: ${phone}\nDate: ${formattedDate}\nReason: ${reason}`;
-                const mailtoUrl = `mailto:appointments@saleemmedical.com?subject=${encodeURIComponent(emailSubj)}&body=${encodeURIComponent(emailBody)}`;
-
-                // Send Alerts
-                window.open(whatsappUrl, '_blank');
-                
-                // Show Success Message
-                showToast('Appointment successfully booked! Notification sent to the clinic.', 'success');
+            // Fetch request to Google Sheets App Script
+            fetch(GOOGLE_SHEET_API_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                // Also save to Firebase Firestore for Portal History
+                return db.collection("appointments").add({
+                    name: name,
+                    phone: phone,
+                    date: formattedDate,
+                    reason: reason,
+                    userId: currentUser.uid,
+                    email: currentUser.email,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            })
+            .then(() => {
+                showToast('Appointment successfully saved to Excel and Database!', 'success');
                 closeAppointmentModal();
                 document.getElementById('bookingForm').reset();
-                
-                btn.innerHTML = 'Confirm & Send Request';
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                showToast('Please make sure you have added your API keys in the code.', 'error');
+            })
+            .finally(() => {
+                btn.innerHTML = 'Save Appointment';
                 btn.disabled = false;
-            }, 1500);
+            });
         }
 
-        // Advanced Toast Notification System
+        // Toast Notification System
         function showToast(message, type) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            
-            let iconClass = 'fa-solid fa-circle-info';
-            let title = 'Notification';
-            
-            if (type === 'success') { iconClass = 'fa-solid fa-circle-check'; title = 'Success'; }
-            if (type === 'error') { iconClass = 'fa-solid fa-circle-exclamation'; title = 'Error'; }
-
-            toast.innerHTML = `
-                <i class="${iconClass} toast-icon"></i>
-                <div class="toast-content">
-                    <div class="toast-title">${title}</div>
-                    <div class="toast-msg">${message}</div>
-                </div>
-                <div class="toast-progress"></div>
-            `;
-            
+            toast.innerHTML = `<div><i class="fa-solid ${type === 'success' ? 'fa-check' : 'fa-exclamation-circle'}"></i> <b>${message}</b></div>`;
             container.appendChild(toast);
-            
             setTimeout(() => { toast.classList.add('show'); }, 10);
-            
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => { toast.remove(); }, 400);
             }, 3000);
         }
 
-        // Language Toggle
+        // Language Toggle Script
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,ur', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+        }
+
         let isUrdu = false;
         function toggleLanguage() {
             var combo = document.querySelector('.goog-te-combo');
