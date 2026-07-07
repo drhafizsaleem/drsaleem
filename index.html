@@ -791,30 +791,46 @@
             .finally(() => { btn.innerHTML = 'Save & Send Prescription'; btn.disabled = false; });
         }
 
-        /* ======== PATIENT EMR (PDF) LOGIC ======== */
-        function loadPatientData() {
-            db.collection("prescriptions").where("userId", "==", currentUser.uid).orderBy("timestamp", "desc").onSnapshot(snapshot => {
-                const tbody = document.getElementById('patient-rx-body');
-                tbody.innerHTML = '';
-                if(snapshot.empty) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No digital prescriptions found yet.</td></tr>'; return; }
+        /* ======== UPDATED PATIENT EMR LOGIC ======== */
+function loadPatientData() {
+    // مریض کے لیے اس کی اپنی UID کے مطابق نسخے فیچ کریں
+    db.collection("prescriptions")
+        .where("userId", "==", currentUser.uid)
+        .orderBy("timestamp", "desc")
+        .onSnapshot(snapshot => {
+            const tbody = document.getElementById('patient-rx-body');
+            tbody.innerHTML = ''; // پرانا ڈیٹا صاف کریں
 
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    const tr = document.createElement('tr');
-                    // Store full data payload in a hidden way or pass via function safely (escaping strings)
-                    const safeMed = data.medicines.replace(/\n/g, '\\n').replace(/'/g, "\\'");
-                    
-                    tr.innerHTML = `
-                        <td>${data.date}</td>
-                        <td>Dr. Hafiz Saleemullah</td>
-                        <td>${data.diagnosis}</td>
-                        <td><button class="btn-download" onclick="generatePDF('${data.patientName}', '${data.emr}', '${data.date}', '${safeMed}')"><i class="fa-solid fa-download"></i> PDF</button></td>
-                    `;
-                    tbody.appendChild(tr);
-                });
+            if (snapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No digital prescriptions found yet.</td></tr>';
+                return;
+            }
+
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const tr = document.createElement('tr');
+                
+                // اسٹرنگ کو محفوظ طریقے سے پاس کرنے کے لیے escape کریں
+                const safeMed = data.medicines.replace(/'/g, "\\'").replace(/\n/g, '\\n');
+                
+                tr.innerHTML = `
+                    <td>${data.date}</td>
+                    <td>Dr. Hafiz Saleemullah</td>
+                    <td>${data.diagnosis}</td>
+                    <td>
+                        <button class="btn-download" onclick="generatePDF('${data.patientName}', '${data.emr}', '${data.date}', '${safeMed}')">
+                            <i class="fa-solid fa-download"></i> Download PDF
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
-        }
-
+        }, (error) => {
+            console.error("Error loading prescriptions: ", error);
+            showToast("Failed to load prescriptions.", "error");
+        });
+}
+        
         // Generate PDF using html2pdf
         function generatePDF(name, emr, date, medicines) {
             showToast('Generating PDF, please wait...', 'info');
